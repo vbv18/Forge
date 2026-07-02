@@ -20,7 +20,8 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Forge - AI App Builder",
-  description: "Forge is an AI app builder that allows you to create and deploy AI-powered applications with ease. Build your own AI apps without writing code.",
+  description:
+    "Forge is an AI app builder that allows you to create and deploy AI-powered applications with ease. Build your own AI apps without writing code.",
   icons: {
     icon: "/logo-2.jpeg",
   },
@@ -33,10 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html
-        lang="en"
-        suppressHydrationWarning
-      >
+      <html lang="en" suppressHydrationWarning>
         <body className={`${lora.variable} ${dmSans.variable} font-sans`}>
           <ThemeProvider
             attribute="class"
@@ -45,9 +43,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-            <main>
-              {children}
-            </main>
+            <main>{children}</main>
           </ThemeProvider>
         </body>
       </html>
