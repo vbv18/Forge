@@ -31,11 +31,7 @@ export const PRICING_PLANS = [
     featured: false,
     planId: null,
     active: true,
-    features: [
-      "10 generations / month",
-      "Live preview",
-      "Export to zip"
-    ],
+    features: ["10 generations / month", "Live preview", "Export to zip"],
   },
   {
     key: "starter",

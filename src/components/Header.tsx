@@ -9,7 +9,6 @@ import { PLANS } from "@/lib/constants";
 import { PlanType } from "@/types/plan";
 
 export default async function Header() {
-
   const user = await checkUser();
 
   return (
@@ -63,13 +62,11 @@ export default async function Header() {
                 <span className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 text-xs text-white/70">
                   <Zap className="h-3 w-3 fill-white/70" />
                   <span>
-                    {user.credits} / {PLANS[user?.plan as PlanType].credits} credits
+                    {user.credits} / {PLANS[user?.plan as PlanType].credits}{" "}
+                    credits
                   </span>
-                  <span className="font-extrabold text-gray-400 text-xl">
-                    |
-                  </span>
-                  <span className="text-yellow-500">
-                    {user.plan.toUpperCase()}
+                  <span className="rounded-full bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase text-black shadow">
+                    {user.plan}
                   </span>
                 </span>
               </PricingModal>
