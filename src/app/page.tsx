@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 
 import { GEMINI_MODEL } from "@/lib/constants";
 import { SectionHeading, SectionLabel } from "@/components/re-usables";
-import { SignInButton, useAuth } from "@clerk/nextjs";
-import { FEATURES, PLACEHOLDERS, SUGGESTIONS } from "@/lib/data";
-import { ArrowRight, Zap } from "lucide-react";
+import { PricingTable, SignInButton, useAuth } from "@clerk/nextjs";
+import { FEATURES, PLACEHOLDERS, STEPS, SUGGESTIONS } from "@/lib/data";
+import { ArrowRight, ChevronRight, Zap } from "lucide-react";
 
 export default function Home() {
   const { isSignedIn } = useAuth();
@@ -59,16 +59,16 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] selection:bg-white/20">
-      <section className="relative min-h-screen flex flex-col items-center overflow-hidden px-4 pb-24 pt-32 text-center">
+      <section className="relative min-h-screen flex flex-col items-center overflow-hidden px-4 pt-32 pb-16 text-center">
         {/* Background from @animate-ui */}
         <HoleBackground
           strokeColor="rgba(255, 255, 255, 0.2)"
           className="absolute inset-0 h-full w-full"
           style={{
             maskImage:
-              "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)",
+              "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)",
             WebkitMaskImage:
-              "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)",
+              "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)",
           }}
         />
 
@@ -79,18 +79,18 @@ export default function Home() {
 
         <SectionHeading gray="Forge your dream" blue="from a single prompt." />
 
-        <p className="mx-auto mt-8 max-w-xl text-balance text-base leading-relaxed text-white/40 z-10">
+        <p className="z-10 mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base leading-7 text-white/55">
           Describe what you want to build. AI writes the code, picks the
           packages, and renders a live preview all inside your browser.
         </p>
 
         {/* Prompt box */}
-        <div className="relative mx-auto mt-14 w-full max-w-2xl">
+        <div className="relative mx-auto mt-10 w-full max-w-3xl">
           <div
             className={cn(
-              "rounded-2xl border bg-[#111111] duration-200",
+              "rounded-2xl border border-white/10 bg-[#111111] shadow-lg shadow-black/30 transistion-all duration-300",
               isFocused
-                ? "border-white/20 ring-1 ring-white/8"
+                ? "border-white/20 ring-1 ring-white/10 shadow-xl shadow-black/40"
                 : "border-white/8",
             )}
           >
@@ -103,12 +103,12 @@ export default function Home() {
               onBlur={() => setIsFocused(false)}
               placeholder={PLACEHOLDERS[placeholderIndex]}
               rows={1}
-              className="w-full resize-none bg-transparent px-5 py-4 text-sm placeholder:text-white/20 focus:outline-none sm:text-base"
+              className="w-full resize-none bg-transparent px-5 py-4 text-sm placeholder:text-white/35 focus:outline-none sm:text-base"
               style={{ minHeight: 56, maxHeight: 200 }}
             />
 
             <div className="flex items-center justify-between border-t border-white/6 px-4 py-2.5">
-              <span className="text-xs text-white/20">
+              <span className="text-xs text-white/45">
                 Press ⏎ to generate · Shift+⏎ for new line
               </span>
 
@@ -138,7 +138,7 @@ export default function Home() {
               <button
                 key={s}
                 onClick={() => handleSuggestion(s)}
-                className="rounded-full border border-white/8 bg-white/4 px-3 py-1.5 text-xs text-white/40 hover:border-white/15 hover:bg-white/8 hover:text-white/70"
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/60 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white hover:scale-105"
               >
                 {s}
               </button>
@@ -152,7 +152,7 @@ export default function Home() {
       </section>
 
       {/* App demo */}
-      <section className="pt-8 pb-24 px-4 hidden sm:block">
+      <section className="pt-4 pb-20 px-4 hidden sm:block">
         <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-white/8 bg-[#0f0f0f] shadow-2xl shadow-black/60">
           <div className="flex items-center gap-2 border-b border-white/6 px-4 py-3">
             <div className="flex gap-1.5">
@@ -270,30 +270,174 @@ export default function Home() {
 
       {/* Features */}
       <section className="px-4 pb-32">
-        <div className="mx-auto mb-14 max-w-5xl text-center">
+        <div className="mx-auto mb-12 max-w-4xl text-center">
           <SectionLabel>Everything you need</SectionLabel>
 
           <SectionHeading gray="From Prompt" blue="to Production" />
         </div>
 
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/6 bg-white/6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map(({ icon: Icon, label, desc }) => (
             <div
               key={label}
               className="group bg-[#0a0a0a] p-8 hover:bg-[#0f0f0f]"
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-white/8 bg-white/4 group-hover:border-white/15 group-hover:bg-white/8">
+              <div
+                className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-white/8 bg-white/4 group-hover:border-white/15 group-hover:bg-white/8"
+              >
                 <Icon className="h-4 w-4 text-white/60 group-hover:text-blue-400/70" />
               </div>
-              <p className="mb-2 text-sm font-semibold">{label}</p>
-              <p className="text-sm leading-relaxed text-white/55">{desc}</p>
+
+              <p
+                className="mb-2 text-sm font-semibold"
+              >
+                {label}
+              </p>
+
+              <p
+                className="text-sm leading-relaxed text-white/55"
+              >
+                {desc}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
       {/* How it works */}
-      <section></section>
+      <section
+        className="px-4 pb-32"
+      >
+        <div
+          className="mx-auto mb-14 max-w-6xl text-center"
+        >
+          <SectionLabel>
+            How it works
+          </SectionLabel>
+
+          <SectionHeading gray="Four steps" blue="to a working app" />
+        </div>
+
+        <div
+          className="mx-auto max-w-3xl flex flex-col"
+        >
+          {STEPS.map((step, i) => (
+            <div
+              key={step.number}
+              className="flex gap-6"
+            >
+              <div
+                className="flex flex-col items-center"
+              >
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/4"
+                >
+                  <span
+                    className="font-mono text-xs font-semibold text-white/50"
+                  >
+                    {step.number}
+                  </span>
+                </div>
+
+                {i < STEPS.length - 1 && (
+                  <div className="mt-2 h-full w-px bg-white/6" />
+                )}
+              </div>
+
+              <div className="pb-10 pt-1.5">
+                <p className="mb-1.5 text-sm font-semibold sm:text-base">
+                  {step.label}
+                </p>
+
+                <p className="text-sm leading-relaxed text-white/40">
+                  {step.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section
+        className="px-4 pb-32"
+      >
+        <div
+          className="mx-auto mb-14 max-w-6xl text-center"
+        >
+          <SectionLabel>
+            Simple Pricing
+          </SectionLabel>
+
+          <SectionHeading gray="Start free" blue="scale when ready." />
+
+          <p
+            className="mx-auto mt-4 max-w-sm text-sm text-white/35"
+          >
+            No credit card required. Upgrade or downgrade anytime.
+          </p>
+        </div>
+
+        <div
+          className="mx-auto max-w-6xl"
+        >
+          <PricingTable
+            checkoutProps={{
+              appearance: {
+                elements: {
+                  drawerRoot: {
+                    zIndex: 2000
+                  }
+                }
+              }
+            }}
+          />
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section
+        className="relative mx-auto mb-32 max-w-5xl overflow-hidden rounded-2xl border border-white/8 px-10 py-24 text-center"
+      >
+        <HoleBackground
+          strokeColor="rgba(255,255,255,0.05)"
+          numberOfLines={36}
+          numberOfDiscs={36}
+          particleRGBColor={[147, 197, 253]}
+          className="absolute inset-0 h-full w-full"
+          style={{
+            maskImage:
+              "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)",
+          }}
+        />
+
+        <SectionHeading gray="Start building," blue="for free." />
+
+        <p
+          className="mb-8 text-sm leading-relaxed text-white/40"
+        >
+          Get 10 free generations on sign up. No credit card required.
+          <br />
+          Upgrade when you are ready.
+        </p>
+
+        <SignInButton mode="modal">
+          <Button
+            size="lg"
+            className="relative h-11 rounded-full bg-white px-8"
+          >
+            Get started free
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </SignInButton>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/7 py-12 mx-auto px-6 flex flex-wrap items-center justify-center text-stone-400">
+        - by @vbv18
+      </footer>
     </main>
   );
 }
