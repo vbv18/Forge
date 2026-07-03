@@ -24,7 +24,7 @@ model User {
   name      String
   email     String   @unique
   imageUrl  String   @default("")
-  credits   Int
+  credits   Int      @default(10)
   plan      PLAN     @default(free)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -34,7 +34,7 @@ model User {
 
 model Workspace {
   id        String   @id @default(cuid())
-  title     String
+  title     String?
   userId    String
   messages  Json
   fileData  Json?
