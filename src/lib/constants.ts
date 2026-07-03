@@ -14,7 +14,7 @@ export const PLANS = {
   pro: {
     label: "Pro",
     credits: 150,
-    price: 29,
+    price: 25,
   },
 } as const;
 
@@ -31,7 +31,11 @@ export const PRICING_PLANS = [
     featured: false,
     planId: null,
     active: true,
-    features: ["10 generations / month", "Live preview", "Export to zip"],
+    features: [
+      "10 generations / month",
+      "Live preview",
+      "Export to zip"
+    ],
   },
   {
     key: "starter",
@@ -39,30 +43,36 @@ export const PRICING_PLANS = [
     description: "For developers who build regularly.",
     price: 9,
     featured: true,
-    planId: "cplan_3DvxGsOeYA5bpJzGWPi8o7wScRD",
+    planId: "cplan_3Fyu2xrQSsR3VJhoLg2BpnV5rMH",
     active: false,
     features: [
       "50 generations / month",
-      "Image uploads",
       "Live preview",
       "Export to zip",
+      "Image uploads",
     ],
   },
   {
     key: "pro",
     label: "Pro",
     description: "For power users who ship fast.",
-    price: 29,
+    price: 25,
     featured: false,
-    planId: "cplan_3DvxTfywwB0NyQ1iqANclgNqlq8",
+    planId: "cplan_3FyuKtowDS6JHnOCjUG4M5nlK8x",
     active: false,
     features: [
       "150 generations / month",
-      "Priority AI (faster response)",
+      "Access to Forge Pro Agent",
+      "Priority AI (lower waiting time)",
       "Live preview",
       "Export to zip",
       "Image uploads",
-      "Access to Forge Pro Agent",
     ],
   },
 ] as const;
+
+export const PLAN_RANK: Record<string, number> = {
+  free: 0,
+  starter: 1,
+  pro: 2,
+} as const;
