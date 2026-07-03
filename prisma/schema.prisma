@@ -11,3 +11,35 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum PLAN {
+  free
+  starter
+  pro
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  name      String
+  email     String   @unique
+  imageUrl  String   @default("")
+  credits   Int
+  plan      PLAN     @default(free)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace Workspace[]
+}
+
+model Workspace {
+  id        String   @id @default(cuid())
+  title     String
+  userId    String
+  messages  Json
+  fileData  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
