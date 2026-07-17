@@ -13,9 +13,17 @@ import { sandpackDark } from "@codesandbox/sandpack-themes";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { FileData, Files, StatusStep } from "@/types/workspace";
 import { BASE_DEPENDENCIES, CODE_PLACEHOLDER } from "@/lib/constants";
-import { AlertTriangle, Bot, Code2, Eye } from "lucide-react";
+import {
+  AlertTriangle,
+  Bot,
+  Code2,
+  Download,
+  Eye,
+  Loader2,
+} from "lucide-react";
 import { RingLoader } from "react-spinners";
 import { Button } from "./ui/button";
+import JSZip from "jszip";
 
 type ActiveTab = "preview" | "code";
 
@@ -130,7 +138,108 @@ function SandpackInner({
   }
 
   // Todo: Export to ZIP
-  async function handleExportZip() {}
+  async function handleExportZip() {
+    if (isExporting) return;
+    setIsExporting(true);
+
+    try {
+      const filesToZip =
+        Object.keys(sandpack.files).length > 0
+          ? sandpack.files
+          : (fileData?.files ?? {});
+
+      const dependencies = {
+        ...BASE_DEPENDENCIES,
+        ...(fileData?.dependencies ?? {}),
+      };
+
+      const zip = new JSZip();
+
+      const packageJson = {
+        name: "forge-app",
+        version: "1.0.0",
+        private: true,
+        dependencies: {
+          react: "^18.2.0",
+          "react-dom": "^18.2.0",
+          "react-scripts": "5.0.1",
+          ...dependencies,
+        },
+        scripts: {
+          start: "react-scripts start",
+          build: "react-scripts build",
+        },
+        browserslist: {
+          production: [">0.2%", "not dead", "not op_mini all"],
+          development: ["last 1 chrome version"],
+        },
+      };
+
+      zip.file("package.json", JSON.stringify(packageJson, null, 2));
+
+      zip.file(
+        "public/index.html",
+        `<!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Forge App</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+          </head>
+          <body>
+            <div id="root"></div>
+          </body>
+        </html>`,
+      );
+
+      for (const [filePath, fileObj] of Object.entries(filesToZip)) {
+        const code =
+          typeof fileObj === "object" && fileObj !== null && "code" in fileObj
+            ? (fileObj as { code: string }).code
+            : "";
+
+        const zipPath = filePath.startsWith("/")
+          ? `src${filePath}`
+          : `src/${filePath}`;
+
+        zip.file(zipPath, code);
+      }
+
+      zip.file(
+        "src/index.js",
+        `import React from 'react';
+          import ReactDOM from 'react-dom/client';
+          import App from './App';
+
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(<React.StrictMode><App /></React.StrictMode>);`,
+      );
+
+      zip.file(
+        "README.md",
+        `# Forge App\n\nGenerated with [Forge](https://forge.app).\n\n## Getting started\n\n\`\`\`bash\nnpm install\nnpm start\n\`\`\``,
+      );
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const zipName = appTitle
+        ? `${appTitle
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "")}.zip`
+        : "forge-app.zip";
+      a.download = zipName;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Export failed: " + err);
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   return (
     <Tabs
@@ -158,7 +267,21 @@ function SandpackInner({
           {/* Todo: improve with ai button */}
           {isProUser ? <p>yes</p> : <p>no</p>}
 
-          {/* Todo: export to zip button */}
+          {/* export to zip button */}
+          <Button
+            variant={"ghost"}
+            size="sm"
+            onClick={handleExportZip}
+            disabled={isExporting || !fileData}
+            className={"h-7 gap-1.5 text-xs text-white/40 hover:text-white/70"}
+          >
+            {isExporting ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Download className={"h-3.5 w-3.5"} />
+            )}
+            Export
+          </Button>
         </div>
       </div>
 
@@ -273,7 +396,7 @@ export function CodePanel({
     <div className="flex flex-1 flex-col overflow-hidden">
       <SandpackProvider
         key={filePathKey}
-        template="react-ts"
+        template="react"
         theme={sandpackDark}
         files={files}
         customSetup={{ dependencies }}

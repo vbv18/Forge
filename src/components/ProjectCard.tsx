@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { Trash2, MessageSquare } from "lucide-react";
-import { ProjectSummary } from "@/actions/projects";
+import { ProjectSummary } from "@/types/project";
 import { DeleteProjectModal } from "./DeleteProjectModal";
 
 interface ProjectCardProps {

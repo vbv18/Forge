@@ -1,5 +1,7 @@
 export const GEMINI_MODEL_NAME: string = "Gemini 3.5 Flash";
-export const GEMINI_MODEL: string = "gemini-3.5-flash";
+export const GEMINI_MODEL: string = "gemini-2.5-flash";
+
+export const SUPABASE_BUCKET_NAME: string = "workspace_image";
 
 export const PLANS = {
   free: {
@@ -76,218 +78,145 @@ export const PLAN_RANK: Record<string, number> = {
 
 // Code - Panel Placeholder
 export const CODE_PLACEHOLDER = {
-  "/main.tsx": {
+  "/App.js": {
     code: `
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import "./index.css";
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
-);
-`,
-  },
-
-  "/App.tsx": {
-    code: `
-import AppRoutes from "./routes";
-
 export default function App() {
   return (
-      <AppRoutes />
-  );
-}
-`,
-  },
-
-  "/routes/index.tsx": {
-    code: `
-import { Routes, Route } from "react-router-dom";
-import HomePage from "../pages/HomePage";
-import NotFoundPage from "../pages/NotFoundPage";
-
-export default function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
-}
-`,
-  },
-
-  "/pages/HomePage.tsx": {
-    code: `
-import { Zap } from "lucide-react";
-
-export default function HomePage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-950">
-      <div className="text-center">
-        <Zap className="mx-auto mb-6 h-14 w-14 text-orange-500" />
-
-        <h1 className="text-3xl font-bold text-white">
-          AI App Builder
-        </h1>
-
-        <p className="mt-4 text-zinc-400">
-          Describe your idea and your production-ready app will appear here.
-        </p>
+    <div style={{
+      minHeight: "100vh",
+      background: "#0a0a0a",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontFamily: "system-ui, sans-serif",
+    }}>
+      <div style={{ textAlign: "center", color: "rgba(255,255,255,0.3)" }}>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>⚡</div>
+        <p style={{ fontSize: 14 }}>Your app will appear here</p>
       </div>
-    </main>
-  );
-}
-`,
-  },
-
-  "/pages/NotFoundPage.tsx": {
-    code: `
-export default function NotFoundPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-3xl font-semibold">
-        404 - Page Not Found
-      </h1>
     </div>
   );
 }
-`,
-  },
-
-  "/hooks/useApp.ts": {
-    code: `
-export function useApp() {
-  return {};
-}
-`,
-  },
-
-  "/utils/index.ts": {
-    code: `
-export {};
-`,
-  },
-
-  "/types/index.ts": {
-    code: `
-export {};
-`,
-  },
-
-  "/.env.sample": {
-    code: `
-VITE_API_URL=
-`,
+  `,
   },
 };
 
 // base dependencies for each workspace
 export const BASE_DEPENDENCIES: Record<string, string> = {
+  "react-is": "latest",
   "react-router-dom": "latest",
   "lucide-react": "latest",
+  recharts: "latest",
+  "date-fns": "latest",
+  "framer-motion": "latest",
+  "react-hook-form": "latest",
+  "@hookform/resolvers": "latest",
+  zod: "latest",
+  "@radix-ui/react-dialog": "latest",
+  "@radix-ui/react-dropdown-menu": "latest",
+  "@radix-ui/react-tabs": "latest",
+  "@radix-ui/react-tooltip": "latest",
+  "@radix-ui/react-accordion": "latest",
+  "@radix-ui/react-select": "latest",
+  axios: "latest",
   clsx: "latest",
-  "tailwind-merge": "latest",
   "class-variance-authority": "latest",
-  sonner: "latest",
+  "tailwind-merge": "latest",
 };
 
 export const SYSTEM_PROMPT = `
-You are a Staff Software Engineer and AI Full-Stack Architect.
+You are a senior React engineer.
 
-Generate production-ready React + TypeScript applications.
+Generate production-ready React (JavaScript) applications.
 
-Return ONLY valid JSON (parsable by JSON.parse()):
+Return ONLY valid JSON parsable by JSON.parse():
 
 {
   "assistantMessage":"string",
   "title":"string",
   "files":{
-    "/path/file":{"code":"complete source"}
+    "/path/file":{"code":"source"}
   },
   "dependencies":{
     "package":"latest"
   }
 }
 
-Return no markdown, explanations, or extra text.
+No markdown, comments outside code, or extra text.
 
-The runtime already provides:
+Runtime already includes:
 - React
-- TypeScript
 - Vite
 - Tailwind CSS
 - Sandpack
 - package.json
-- tsconfig.json
-- vite.config.ts
+- vite.config.js
 - index.html
 
-Generate only source files under:
-/App.tsx
-/main.tsx
-/routes/**
-/pages/**
-/layouts/**
-/features/**
-/components/**
-/components/ui/**
-/hooks/**
-/context/**
-/services/**
-/lib/**
-/utils/**
-/types/**
-/constants/**
-/assets/**
-/.env.sample
+Generate only:
+- /App.jsx
+- /main.jsx
+- /routes/**
+- /pages/**
+- /layouts/**
+- /features/**
+- /components/**
+- /components/ui/**
+- /hooks/**
+- /context/**
+- /services/**
+- /lib/**
+- /utils/**
+- /constants/**
+- /assets/**
+- /.env.sample
 
-Never generate configs, lockfiles, build folders, README, public assets, or package.json unless requested.
+Never generate:
+- package.json
+- package-lock.json
+- yarn.lock
+- pnpm-lock.yaml
+- tsconfig*
+- vite.config.*
+- README*
+- public/**
+- dist/**
+- node_modules/**
 
-Requirements:
+Rules:
 - Complete files only.
-- No placeholders, omissions, or partial implementations.
-- Replace existing placeholder files completely when needed.
 - Every import must resolve.
 - No unused files or imports.
-- Compile without TypeScript errors.
-- Prefer strict typing; avoid any unless unavoidable.
+- Keep the project runnable.
 - Use modular, reusable, feature-based architecture.
-- Favor composition over large components.
-- Generate only the files required for the requested application.
+- Prefer composition over large components.
+- Generate only required files.
 
 Routing:
-- Use React Router only when multiple pages are needed.
+- Use react-router-dom only if multiple pages are needed.
 
 Services:
-- Centralize API calls in /services.
-- Never fabricate backend APIs, credentials, or schemas.
-- If backend details are missing, keep the frontend runnable and add concise TODOs only where manual configuration is required.
+- Put API logic in /services.
+- Never invent backend APIs.
+- If backend details are missing, keep the app functional and add brief TODOs where configuration is required.
 
 Environment:
-- Generate /.env.sample only if environment variables are used.
+- Generate /.env.sample only when env variables are used.
 - Never hardcode secrets.
 
 Dependencies:
-- Include only imported third-party packages.
-- Every imported package must appear in dependencies.
-- Exclude react, react-dom, and tailwindcss.
-- Use "latest" unless a version is requested.
+- List only imported third-party packages.
+- Exclude react, react-dom, vite, and tailwindcss.
+- Use "latest" unless a version is specified.
 
 UI:
-- Responsive, accessible, modern, and production-quality.
+- Responsive, accessible, modern.
 
-assistantMessage must be one concise sentence.
-title must be 2–6 words.
+assistantMessage: one concise sentence.
+title: 2-6 words.
 
-Optimize so the developer only needs to:
-1. Install dependencies.
-2. Fill any required environment variables.
-3. Run the application.
+The developer should only need to:
+1. npm install
+2. Configure .env (if required)
+3. npm run dev
 `;

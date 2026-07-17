@@ -19,6 +19,8 @@ import type { Message, StatusStep } from "@/types/workspace";
 import { BlueTitle } from "@/components/re-usables";
 import { Button } from "@/components/ui/button";
 import { PricingModal } from "@/components/PricingModal";
+import { SUPABASE_BUCKET_NAME } from "@/lib/constants";
+import { toast } from "sonner";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -117,17 +119,22 @@ export function ChatPanel({
     setIsUploading(true);
     try {
       const ext = file.name.split(".").pop();
+
       const path = `${userId}/${workspaceId ?? "new"}/${Date.now()}.${ext}`;
+
       const { error } = await supabase.storage
         .from("workspace-images")
         .upload(path, file, { upsert: true });
       if (error) throw error;
+
       const { data } = supabase.storage
-        .from("workspace-images")
+        .from(SUPABASE_BUCKET_NAME)
         .getPublicUrl(path);
+
       setPendingImageUrl(data.publicUrl);
-    } catch {
-      // silent
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      toast.error(message);
     } finally {
       setIsUploading(false);
       if (fileRef.current) fileRef.current.value = "";

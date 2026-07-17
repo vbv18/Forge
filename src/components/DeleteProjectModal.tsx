@@ -15,7 +15,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { deleteProject, ProjectSummary } from "@/actions/projects";
+import { deleteProject } from "@/actions/projects";
+import { ProjectSummary } from "@/types/project";
 
 interface DeleteProjectModalProps {
   project: ProjectSummary;
