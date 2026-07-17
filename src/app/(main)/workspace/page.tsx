@@ -1,6 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import React from "react";
+import { WorkspaceClient } from "@/components/WorkspaceClient";
+import { getWorkspaceUser, getWorkspaceById } from "@/actions/workspace";
 
 type WorkspacePageProps = {
   searchParams: Promise<{
@@ -14,14 +13,20 @@ export default async function WorkspacePage({
 }: WorkspacePageProps) {
   const { prompt, id } = await searchParams;
 
-  const { userId } = await auth();
-  if (!userId) redirect("/");
+  const user = await getWorkspaceUser();
+
+  let workspace = null;
+  if (id) {
+    workspace = await getWorkspaceById(id, user.id);
+  }
 
   return (
-    <div>
-      <p>
-        Workspace - prompt:{prompt}, id:{id}
-      </p>
-    </div>
+    <WorkspaceClient
+      initialPrompt={prompt ?? null}
+      workspace={workspace}
+      userCredits={user.credits}
+      userId={user.id}
+      userPlan={user.plan}
+    />
   );
 }
