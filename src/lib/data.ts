@@ -1,5 +1,5 @@
 import { Sparkles, Zap, Code2, Eye, Package, ImageIcon } from "lucide-react";
-import { GEMINI_MODEL } from "./constants";
+import { GEMINI_MODEL_NAME } from "./constants";
 
 export const SUGGESTIONS = [
   "A Spotify stats dashboard with charts",
@@ -14,7 +14,7 @@ export const FEATURES = [
   {
     icon: Zap,
     label: "Instant generation",
-    desc: `Describe your app in plain English. ${GEMINI_MODEL} returns production-ready React + Tailwind code in seconds.`,
+    desc: `Describe your app in plain English. ${GEMINI_MODEL_NAME} returns production-ready React + Tailwind code in seconds.`,
   },
   {
     icon: Eye,
