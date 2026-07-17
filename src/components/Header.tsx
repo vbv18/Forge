@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import PricingModal from "./PricingModal";
+import { PricingModal } from "./PricingModal";
 import { checkUser } from "@/lib/checkUser";
 import { PLANS } from "@/lib/constants";
 import { PlanType } from "@/types/plan";

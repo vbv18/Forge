@@ -1,29 +1,23 @@
 "use client";
 
 import React from "react";
-import { useAuth, SignInButton, PricingTable } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useAuth, PricingTable } from "@clerk/nextjs";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { BlueTitle, GrayTitle } from "./re-usables";
-import { PRICING_PLANS, PLAN_RANK } from "@/lib/constants";
+import { BlueTitle } from "./re-usables";
 
 type PricingModalProps = {
   children: React.ReactNode;
   reason?: "credits" | "upgrade";
 };
 
-export default function PricingModal({
+export function PricingModal({
   children,
   reason = "upgrade",
 }: PricingModalProps) {
