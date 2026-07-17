@@ -100,9 +100,10 @@ function SandpackInner({
       }
 
       if (msg.type === "compile") {
-        const errMsg = "message" in msg && typeof msg.message === "string"
-          ? msg.message
-          : "Compile error in preview.";
+        const errMsg =
+          "message" in msg && typeof msg.message === "string"
+            ? msg.message
+            : "Compile error in preview.";
 
         setPreviewError(errMsg);
         return;
@@ -129,8 +130,7 @@ function SandpackInner({
   }
 
   // Todo: Export to ZIP
-  async function handleExportZip() { }
-
+  async function handleExportZip() {}
 
   return (
     <Tabs
@@ -246,7 +246,6 @@ function SandpackInner({
     </Tabs>
   );
 }
-
 
 export function CodePanel({
   fileData,

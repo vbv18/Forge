@@ -26,7 +26,6 @@ export function DeleteProjectModal({
   project,
   children,
 }: DeleteProjectModalProps) {
-  
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
