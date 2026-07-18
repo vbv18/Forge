@@ -3,7 +3,6 @@ import { GEMINI_MODEL_NAME } from "./constants";
 
 export const SUGGESTIONS = [
   "A Spotify stats dashboard with charts",
-  "A kanban board with drag and drop",
   "A weather app with animated icons",
   "A personal finance tracker",
   "A recipe finder with filters",

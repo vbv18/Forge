@@ -298,23 +298,23 @@ export async function POST(req: NextRequest) {
         const workspace = await prisma.$transaction(async (tx) => {
           const ws = workspaceId
             ? await tx.workspace.update({
-              where: {
-                id: workspaceId,
-                userId: user.id,
-              },
-              data: {
-                messages: updatedMessages as never,
-                fileData: newFileData as never,
-              },
-            })
+                where: {
+                  id: workspaceId,
+                  userId: user.id,
+                },
+                data: {
+                  messages: updatedMessages as never,
+                  fileData: newFileData as never,
+                },
+              })
             : await tx.workspace.create({
-              data: {
-                userId: user.id,
-                title: aiTitle ?? lastUserMessage.content.slice(0, 80),
-                fileData: newFileData as never,
-                messages: updatedMessages as never,
-              },
-            });
+                data: {
+                  userId: user.id,
+                  title: aiTitle ?? lastUserMessage.content.slice(0, 80),
+                  fileData: newFileData as never,
+                  messages: updatedMessages as never,
+                },
+              });
 
           await tx.user.update({
             where: {

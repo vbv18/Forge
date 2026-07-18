@@ -123,7 +123,7 @@ export function ChatPanel({
       const path = `${userId}/${workspaceId ?? "new"}/${Date.now()}.${ext}`;
 
       const { error } = await supabase.storage
-        .from("workspace-images")
+        .from(SUPABASE_BUCKET_NAME)
         .upload(path, file, { upsert: true });
       if (error) throw error;
 
