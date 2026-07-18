@@ -7,7 +7,7 @@ import {
   GEMINI_MODEL,
   SYSTEM_PROMPT,
 } from "@/lib/constants";
-import type { Message, FileData } from "@/types/workspace";
+import type { Message, FileData, Files } from "@/types/workspace";
 import { aj } from "@/lib/arcjet";
 
 const ai = new GoogleGenAI({
@@ -231,7 +231,7 @@ export async function POST(req: NextRequest) {
         let parsed: {
           assistantMessage: string;
           title?: string;
-          files: Record<string, { code: string }>;
+          files: Files;
           dependencies: Record<string, string>;
         };
 
