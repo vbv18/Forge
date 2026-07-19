@@ -227,11 +227,11 @@ export function ChatPanel({
                     />
                     <div className="min-w-0 rounded-2xl rounded-tl-sm bg-white/5 px-3.5 py-2.5">
                       {isLiveStream && !msg.content ? (
-                        // Empty placeholder — show Cline thinking indicator
+                        // Empty placeholder — show Agent thinking indicator
                         <div className="flex items-center gap-2">
                           <Wand2 className="h-3 w-3 shrink-0 text-blue-400/60 animate-pulse" />
                           <span className="text-[12px] text-white/30 animate-pulse">
-                            Cline is thinking…
+                            Agent is thinking…
                           </span>
                         </div>
                       ) : isLiveStream && msg.content ? (
@@ -250,6 +250,7 @@ export function ChatPanel({
                           </p>
                         </div>
                       ) : (
+                        // Normal completed assistant message
                         <div className="prose prose-sm prose-invert max-w-none wrap-break-word text-[13px] leading-relaxed text-white/70 [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-blue-300/80 [&_code]:text-xs [&_code]:break-all [&_li]:my-0.5 [&_p]:my-1 [&_pre]:overflow-x-auto! [&_pre]:whitespace-pre-wrap! [&_ul]:my-1">
                           <ReactMarkdown>{msg.content}</ReactMarkdown>
                         </div>
@@ -367,7 +368,7 @@ export function ChatPanel({
               noCredits
                 ? "Upgrade to keep building…"
                 : isImproving
-                  ? "Cline is improving your app…"
+                  ? "Agent is improving your app…"
                   : isGenerating
                     ? "Generating…"
                     : "Ask AI to modify…"

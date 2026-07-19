@@ -15,6 +15,7 @@ import type { FileData, Files, StatusStep } from "@/types/workspace";
 import { BASE_DEPENDENCIES, CODE_PLACEHOLDER } from "@/lib/constants";
 import {
   AlertTriangle,
+  ArrowUp,
   Bot,
   Code2,
   Download,
@@ -24,6 +25,7 @@ import {
 import { RingLoader } from "react-spinners";
 import { Button } from "./ui/button";
 import JSZip from "jszip";
+import { PricingModal } from "./PricingModal";
 
 type ActiveTab = "preview" | "code";
 
@@ -264,8 +266,72 @@ function SandpackInner({
         </TabsList>
 
         <div className="flex items-center gap-2">
-          {/* Todo: improve with ai button */}
-          {isProUser ? <p>yes</p> : <p>no</p>}
+          {/* improve with ai button */}
+          {isProUser ? (
+            showImproveInput ? (
+              <div className="flex items-center gap-1.5">
+                <div className="relative flex items-center">
+                  <Bot className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-violet-400" />
+                  <input
+                    autoFocus
+                    value={improveInput}
+                    onChange={(e) => setImproveInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleImproveSubmit();
+                      if (e.key === "Escape") setShowImproveInput(false);
+                    }}
+                    placeholder="What should I improve?"
+                    className="h-7 w-56 rounded-md border border-violet-500/30 bg-linear-to-r from-violet-500/10 via-fuchsia-500/10 to-cyan-500/10 pl-8 pr-3 text-xs text-white/80 placeholder:text-white/30 focus:border-violet-400/50 focus:outline-none focus:shadow-[0_0_10px_rgba(139,92,246,0.2)]"
+                  />
+                </div>
+                <button
+                  onClick={handleImproveSubmit}
+                  disabled={!improveInput.trim() || isImproving}
+                  className="group relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-md border border-violet-500/30 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 text-violet-300 transition-all duration-200 hover:border-violet-400/50 hover:from-violet-500/30 hover:to-fuchsia-500/30 hover:shadow-[0_0_10px_rgba(139,92,246,0.3)] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {isImproving ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <ArrowUp className="h-3 w-3" />
+                  )}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowImproveInput(true)}
+                disabled={isImproving || !fileData}
+                className="group relative flex h-7 cursor-pointer items-center gap-1.5 overflow-hidden rounded-md border border-white/10 bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-cyan-500/10 px-2.5 text-xs font-medium transition-all duration-300 hover:border-white/20 hover:from-violet-500/20 hover:via-fuchsia-500/20 hover:to-cyan-500/20 hover:shadow-[0_0_12px_rgba(139,92,246,0.3)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                {isImproving ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-violet-400" />
+                ) : (
+                  <Bot className="h-3.5 w-3.5 text-violet-400 transition-colors group-hover:text-violet-300" />
+                )}
+                <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">
+                  {isImproving ? "Improving…" : "Improve with Agent"}
+                </span>
+                {!isImproving && (
+                  <span className="rounded-sm bg-violet-500/30 px-1 py-0.5 text-[10px] font-semibold leading-none text-violet-300">
+                    PRO
+                  </span>
+                )}
+              </button>
+            )
+          ) : (
+            <PricingModal reason="upgrade">
+              <span className="group relative flex h-7 cursor-pointer items-center gap-1.5 overflow-hidden rounded-md border border-white/10 bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-cyan-500/10 px-2.5 text-xs font-medium text-white/60 transition-all duration-300 hover:border-white/20 hover:from-violet-500/20 hover:via-fuchsia-500/20 hover:to-cyan-500/20 hover:text-white/90 hover:shadow-[0_0_12px_rgba(139,92,246,0.3)]">
+                <span className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                <Bot className="h-3.5 w-3.5 text-violet-400 transition-colors group-hover:text-violet-300" />
+                <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">
+                  Improve with Agent
+                </span>
+                <span className="rounded-sm bg-violet-500/30 px-1 py-0.5 text-[10px] font-semibold leading-none text-violet-300">
+                  PRO
+                </span>
+              </span>
+            </PricingModal>
+          )}
 
           {/* export to zip button */}
           <Button
@@ -292,10 +358,10 @@ function SandpackInner({
             <RingLoader color="#60a5fa" size={64} speedMultiplier={0.8} />
             <div className="flex flex-col items-center gap-1.5">
               <p className="text-sm font-medium text-white/60">
-                {isImproving ? "Improving with Cline AI…" : currentStepLabel}
+                {isImproving ? "Improving with Forge AI…" : currentStepLabel}
               </p>
               <p className="text-xs text-white/20">
-                This usually takes 10–20 seconds
+                This usually takes 15-30 seconds
               </p>
             </div>
           </div>

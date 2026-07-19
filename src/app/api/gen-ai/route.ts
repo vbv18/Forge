@@ -11,7 +11,7 @@ import type { Message, FileData, Files } from "@/types/workspace";
 import { aj } from "@/lib/arcjet";
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
 });
 
 function trimHistory(messages: Message[]): Message[] {

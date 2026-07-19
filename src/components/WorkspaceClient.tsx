@@ -10,6 +10,7 @@ import type {
   FileData,
   StatusStep,
   WorkspaceData,
+  Files,
 } from "@/types/workspace";
 import dynamic from "next/dynamic";
 
@@ -269,7 +270,7 @@ export function WorkspaceClient({
         // Accumulate patches locally — only apply to state at done.
         // Applying on every file_patch event would update fileData state,
         // which feeds into SandpackProvider and can cause remounts mid-stream.
-        const localPatches: Record<string, { code: string }> = {};
+        const localPatches: Files = {};
 
         while (true) {
           const { done, value } = await reader.read();
